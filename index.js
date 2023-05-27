@@ -250,16 +250,17 @@
 
 
 const mongoose = require("mongoose")
-
+mongoose.connect("mongodb://localhost:27017/e-comm");
+const ProductSchema = new mongoose.Schema({
+  name: String,
+  price: Number,
+  brand: String,
+  category: String,
+})
 
 const saveInDB = async () => {
-  await mongoose.connect("mongodb://localhost:27017/e-comm");
-  const ProductSchema = new mongoose.Schema({
-    name: String,
-    price: Number,
-    brand: String,
-    category: String,
-  })
+
+
 
   const ProductsModel = mongoose.model("products", ProductSchema)
   let data = await ProductsModel({ name: "m 120", price: 1000, brand: "unknown", category: "Mobile" })
@@ -268,4 +269,31 @@ const saveInDB = async () => {
 
 }
 
-saveInDB()
+// saveInDB()
+const updateInDB = async () => {
+
+  const ProductsModel = mongoose.model("products", ProductSchema)
+  let data = await ProductsModel.updateOne(
+    { name: "m 10" }, {
+    $set: { price: 2000, brand: "Samsung",category:"mobile" }
+  }
+  )
+
+}
+// updateInDB()
+
+
+const deleteInDB = async()=>{
+  const ProductsModel = mongoose.model("products", ProductSchema)
+  let data = await ProductsModel.deleteOne({ name: "m 10" })
+  console.log(data);
+}
+// deleteInDB()
+
+
+const findInDB = async()=>{
+  const ProductsModel = mongoose.model("products", ProductSchema)
+  let data = await ProductsModel.find({ name: "m 120" })
+  console.log(data);
+}
+findInDB()
